@@ -1,0 +1,57 @@
+<div class="ion-page">
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>Productos</ion-title>
+    </ion-toolbar>
+
+    <ion-toolbar>
+      <ion-searchbar
+        placeholder="Buscar por nombre, marca, categoría..."
+        (ionInput)="onQuery($event)"
+        debounce="0"
+      >
+      </ion-searchbar>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content>
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+      <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+
+    <div *ngIf="loading" class="ion-padding">
+      <ion-spinner></ion-spinner>
+    </div>
+
+    <div *ngIf="!loading && errorMsg" class="ion-padding">
+      <ion-note color="danger">{{ errorMsg }}</ion-note>
+    </div>
+
+    <ng-container *ngIf="productos$ | async as productos">
+      <ion-list *ngIf="!loading">
+        <ion-item
+          button="true"
+          detail="true"
+          *ngFor="let p of productos"
+          (click)="verDetalle(p.idProducto)"
+        >
+          <ion-label>
+            <h2>{{ p.nombre || 'Producto' }}</h2>
+            <p>{{ p.marca || '—' }} · {{ p.categoria || '—' }}</p>
+            <p>
+              Desde: {{ p.precioDesde }} {{ p.moneda || 'USD' }} · Stock: {{
+              p.stockTotalParaVenta }}
+            </p>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+
+      <div
+        class="ion-padding"
+        *ngIf="!loading && productos.length === 0 && !errorMsg"
+      >
+        <ion-note>No hay productos para mostrar.</ion-note>
+      </div>
+    </ng-container>
+  </ion-content>
+</div>

@@ -1,0 +1,53 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Detalle</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div *ngIf="loading">
+    <ion-spinner></ion-spinner>
+  </div>
+
+  <div *ngIf="!loading && producto">
+    <h2 style="margin-top: 0">{{ producto.nombre }}</h2>
+    <p>{{ producto.marca }} · {{ producto.categoria }}</p>
+    <p *ngIf="producto.descripcion">{{ producto.descripcion }}</p>
+
+    <ion-button expand="block" (click)="toggleDeseado()">
+      {{ producto.esDeseado ? 'Quitar de deseados' : 'Guardar en deseados' }}
+    </ion-button>
+
+    <h3>Ofertas</h3>
+    <ion-list>
+      <ion-item *ngFor="let o of producto.ofertas">
+        <ion-label>
+          <h2>
+            {{ o.nombreProveedor || o.codigoProveedor || ('Proveedor #' +
+            o.idProveedor) }}
+          </h2>
+          <p>Lote: {{ o.numeroLote || 'N/A' }}</p>
+          <p>Stock: {{ o.stockParaVenta }}</p>
+        </ion-label>
+
+        <div slot="end" style="text-align: right">
+          <div style="margin-bottom: 6px">
+            {{ o.moneda || 'USD' }} {{ o.precioUnitario }}
+          </div>
+
+          <ion-button
+            size="small"
+            [disabled]="(o.stockParaVenta || 0) <= 0"
+            (click)="addToCart(o)"
+          >
+            Agregar
+          </ion-button>
+        </div>
+      </ion-item>
+      <ion-buttons slot="start">
+        <ion-button (click)="goBack()" (keypress)="goBack()">Atrás</ion-button>
+      </ion-buttons>
+      <ion-title>Volver</ion-title>
+    </ion-list>
+  </div>
+</ion-content>

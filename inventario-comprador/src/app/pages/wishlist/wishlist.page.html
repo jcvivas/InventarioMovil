@@ -1,0 +1,29 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Deseados</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div *ngIf="loading">
+    <ion-spinner></ion-spinner>
+  </div>
+
+  <div *ngIf="!loading && items.length === 0">
+    No tienes productos deseados todavia.
+  </div>
+
+  <ion-list *ngIf="!loading && items.length > 0">
+    <ion-item button *ngFor="let it of items" (click)="verDetalle(it.idProducto)">
+      <ion-label>
+        <h2>{{ it.nombre }}</h2>
+        <p>{{ it.marca }} · {{ it.categoria }}</p>
+        <p *ngIf="it.precioDesde !== null">Desde: {{ it.moneda }} {{ it.precioDesde }}</p>
+      </ion-label>
+
+      <ion-button slot="end" size="small" fill="outline" (click)="$event.stopPropagation(); quitar(it.idProducto)">
+        Quitar
+      </ion-button>
+    </ion-item>
+  </ion-list>
+</ion-content>

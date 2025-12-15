@@ -1,0 +1,55 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Carrito</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ng-container *ngIf="cart.items$ | async as items">
+    <ion-list *ngIf="items.length > 0">
+      <ion-item *ngFor="let it of items">
+        <ion-label>
+          <h2>{{ it.nombreProducto }}</h2>
+          <p>{{ it.proveedor || '—' }}</p>
+          <p>{{ it.moneda || 'USD' }} {{ it.precioUnitario }}</p>
+        </ion-label>
+
+        <div slot="end" style="text-align:right;">
+          <div style="display:flex; gap:6px; align-items:center; justify-content:flex-end;">
+            <ion-button size="small" (click)="dec(it)">-</ion-button>
+
+            <ion-input
+              style="width:64px; text-align:center;"
+              type="number"
+              [value]="it.cantidad"
+              (ionChange)="setQty(it, $event.detail.value)">
+            </ion-input>
+
+            <ion-button size="small" (click)="inc(it)">+</ion-button>
+          </div>
+
+          <div style="margin-top:6px;">
+            <ion-button size="small" fill="clear" color="danger" (click)="remove(it)">
+              Quitar
+            </ion-button>
+          </div>
+        </div>
+      </ion-item>
+    </ion-list>
+
+    <div *ngIf="items.length === 0">
+      <ion-note>No tienes itemsen el carrito.</ion-note>
+    </div>
+
+    <div style="margin-top:16px;">
+      <ion-note>Total: {{ total() }}</ion-note>
+
+      <ion-button
+        expand="block"
+        [disabled]="loading || items.length === 0"
+        (click)="checkout(items)">
+        {{ loading ? 'Procesando...' : 'Comprar' }}
+      </ion-button>
+    </div>
+  </ng-container>
+</ion-content>

@@ -1,0 +1,7 @@
+{
+  "name": "inventario-comprador",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
